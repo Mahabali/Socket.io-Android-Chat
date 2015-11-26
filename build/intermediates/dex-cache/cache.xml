@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/dhilip/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="/Users/dhilip/Downloads/Socket.ioChat 2/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-c35329e7a4e7822e56190b2bd80c4cdd5f5a6d2b.jar" />
+    </item>
+    <item
+        jar="/Users/dhilip/.gradle/caches/modules-2/files-2.1/io.socket/engine.io-client/0.6.2/939f90d47c800626d5b0a4e7f89f98b3dde61dc6/engine.io-client-0.6.2.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="939f90d47c800626d5b0a4e7f89f98b3dde61dc6">
+        <dex dex="/Users/dhilip/Downloads/Socket.ioChat 2/app/build/intermediates/pre-dexed/debug/engine.io-client-0.6.2-bcf03a568a21f7395a1af534cf6851e8b12af2cb.jar" />
+    </item>
+    <item
+        jar="/Users/dhilip/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.6.0/98476622f10715998eacf9240d6b479f12c66143/okio-1.6.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="98476622f10715998eacf9240d6b479f12c66143">
+        <dex dex="/Users/dhilip/Downloads/Socket.ioChat 2/app/build/intermediates/pre-dexed/debug/okio-1.6.0-65ddb40d549cde88763615cc76b34900359db0c2.jar" />
+    </item>
+    <item
+        jar="/Users/dhilip/Downloads/Socket.ioChat 2/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="5b37cf49773f7f17aca9830efd3053b0cac56728">
+        <dex dex="/Users/dhilip/Downloads/Socket.ioChat 2/app/build/intermediates/pre-dexed/debug/classes-712137295a72b1315b66889d37907f906d8103e8.jar" />
+    </item>
+    <item
+        jar="/Users/dhilip/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp/2.5.0/4de2b4ed3445c37ec1720a7d214712e845a24636/okhttp-2.5.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4de2b4ed3445c37ec1720a7d214712e845a24636">
+        <dex dex="/Users/dhilip/Downloads/Socket.ioChat 2/app/build/intermediates/pre-dexed/debug/okhttp-2.5.0-531008e48196a37f618849d22f8286d17166ed41.jar" />
+    </item>
+    <item
+        jar="/Users/dhilip/Downloads/Socket.ioChat 2/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="/Users/dhilip/Downloads/Socket.ioChat 2/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-240cfba488cd6ea2017ce39efc30e299b9c996a9.jar" />
+    </item>
+    <item
+        jar="/Users/dhilip/.gradle/caches/modules-2/files-2.1/io.socket/socket.io-client/0.6.2/31fb4bf50b62daadee5e94f39679812ad8a9ae00/socket.io-client-0.6.2.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="31fb4bf50b62daadee5e94f39679812ad8a9ae00">
+        <dex dex="/Users/dhilip/Downloads/Socket.ioChat 2/app/build/intermediates/pre-dexed/debug/socket.io-client-0.6.2-208c57280ed093096b967b90149f543a9459472f.jar" />
+    </item>
+    <item
+        jar="/Users/dhilip/Downloads/Socket.ioChat 2/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="/Users/dhilip/Downloads/Socket.ioChat 2/app/build/intermediates/pre-dexed/debug/classes-7a20d3ace8db5f9ac0eaf9d133f4b7a423e25b1c.jar" />
+    </item>
+    <item
+        jar="/Users/dhilip/Downloads/Socket.ioChat 2/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
+        <dex dex="/Users/dhilip/Downloads/Socket.ioChat 2/app/build/intermediates/pre-dexed/debug/classes-ff4dbc52c779aaae8ee7f4a80ff7c9ecca7a6491.jar" />
+    </item>
+    <item
+        jar="/Users/dhilip/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp/okhttp-ws/2.5.0/e9753b7dcae5deca92e871c5c759067070b07bc/okhttp-ws-2.5.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="0e9753b7dcae5deca92e871c5c759067070b07bc">
+        <dex dex="/Users/dhilip/Downloads/Socket.ioChat 2/app/build/intermediates/pre-dexed/debug/okhttp-ws-2.5.0-f6e87bf4067667e459ee57778220c3ea0cb3bad2.jar" />
+    </item>
+
+</items>

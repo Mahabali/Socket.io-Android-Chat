@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Socket.IO Chat Demo</string>
+    <string name="action_leave">Leave</string>
+    <string name="action_send">Send</string>
+    <string name="prompt_message">Message</string>
+
+    <string name="error_connect">Failed to connect</string>
+    <!-- messages -->
+    <string name="message_welcome">Welcome to Socket.IO Chat –</string>
+    <plurals name="message_participants">
+        <item quantity="one">there\'s %d participant</item>
+        <item quantity="other">there are %d participants</item>
+    </plurals>
+    <string name="message_user_joined">%s joined</string>
+    <string name="message_user_left">%s left</string>
+    <string name="user_action_typing">is typing</string>
+    <string name="sign_in">Sign In</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="close">close</string>
+    <string name="error_field_required">This is a required field</string>
+    <string name="title_activity_login">Join</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_username">What\'s your nickname?</string>
+    <string name="action_sign_in">Join</string>
+    <string name="action_sign_in_short">Join</string>
+    <string name="title_activity_dummy">Dummy</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+</resources>
