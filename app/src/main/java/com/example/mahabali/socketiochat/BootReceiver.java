@@ -7,7 +7,7 @@ import android.content.Intent;
 import com.example.mahabali.socketioservice.SocketIOService;
 
 /**
- * Created by dhilip on 11/14/15.
+ * Created by Mahabali on 11/14/15.
  */
 public class BootReceiver extends BroadcastReceiver {
     @Override

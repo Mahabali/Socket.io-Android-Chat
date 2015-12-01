@@ -1,6 +1,5 @@
 package com.example.mahabali.socketioservice;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -10,21 +9,18 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.mahabali.Constants;
-import com.example.mahabali.socketiochat.Dummy;
 import com.example.mahabali.socketiochat.MainActivity;
+import com.example.mahabali.socketiochat.PreferenceStorage;
 import com.example.mahabali.socketiochat.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.socket.client.Ack;
@@ -33,24 +29,19 @@ import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class SocketIOService extends Service {
-
-
-
     private  SocketListener socketListener;
     private Boolean appConnectedToService;
+    private  Socket mSocket;
+    private boolean serviceBinded = false;
+    private final LocalBinder mBinder = new LocalBinder();
 
     public void setAppConnectedToService(Boolean appConnectedToService) {
-        Log.i("AppStatus","Status "+appConnectedToService);
         this.appConnectedToService = appConnectedToService;
     }
 
     public void setSocketListener(SocketListener socketListener) {
         this.socketListener = socketListener;
     }
-    private  Socket mSocket;
-    private boolean serviceBinded = false;
-    private final LocalBinder mBinder = new LocalBinder();
-
 
     public class LocalBinder extends Binder{
        public SocketIOService getService(){
@@ -58,17 +49,12 @@ public class SocketIOService extends Service {
         }
     }
 
-    public SocketIOService() {
-    }
-
     public void setServiceBinded(boolean serviceBinded) {
-
         this.serviceBinded = serviceBinded;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
        return mBinder;
     }
 
@@ -109,7 +95,6 @@ public class SocketIOService extends Service {
 
     private void closeSocketSession(){
         mSocket.disconnect();
-        Log.i("AppService","Closing socket session");
         mSocket.off();
     }
     private void addSocketHandlers(){
@@ -117,52 +102,45 @@ public class SocketIOService extends Service {
         mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                Log.i("Info","Socket connected");
                 Intent intent = new Intent(SocketEventConstants.socketConnection);
-                intent.putExtra("connectionStatus",true);
+                intent.putExtra("connectionStatus", true);
                 broadcastEvent(intent);
-
             }
         });
 
         mSocket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                Log.i("Info", "Socket disconnected");
                 Intent intent = new Intent(SocketEventConstants.socketConnection);
-                intent.putExtra("connectionStatus",false);
+                intent.putExtra("connectionStatus", false);
                 broadcastEvent(intent);
             }
         });
 
 
         mSocket.on(Socket.EVENT_CONNECT_ERROR, new Emitter.Listener() {
-        @Override
-        public void call (Object...args){
-            Intent intent = new Intent(SocketEventConstants.connectionFailure);
-            broadcastEvent(intent);
-            Log.i("Failed", "Failed to connect");
-        }
+            @Override
+            public void call(Object... args) {
+                Intent intent = new Intent(SocketEventConstants.connectionFailure);
+                broadcastEvent(intent);
+            }
         });
 
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, new Emitter.Listener() {
             @Override
-            public void call (Object...args){
+            public void call(Object... args) {
                 Intent intent = new Intent(SocketEventConstants.connectionFailure);
                 broadcastEvent(intent);
-                Log.i("Failed", "Failed to connect");
             }
         });
-
-       addNewMessageHandler();
-
-
-
-        
+        if (PreferenceStorage.shouldDoAutoLogin()) {
+            addNewMessageHandler();
+        }
         mSocket.connect();
     }
 
     public void addNewMessageHandler(){
+        mSocket.off(SocketEventConstants.newMessage);
         mSocket.on(SocketEventConstants.newMessage, new Emitter.Listener() {
             @Override
             public void call(final Object... args) {
@@ -173,11 +151,9 @@ public class SocketIOService extends Service {
                 try {
                     username = data.getString("username");
                     message = data.getString("message");
-                    Log.i("Message", " " + username + " " + message);
                 } catch (JSONException e) {
                     return;
                 }
-
 
                 if (isForeground("com.example.mahabali.socketiochat")) {
                     Intent intent = new Intent(SocketEventConstants.newMessage);
@@ -185,22 +161,29 @@ public class SocketIOService extends Service {
                     intent.putExtra("message", message);
                     broadcastEvent(intent);
                 } else {
-                    showNotificaitons(username,message);
+                    showNotificaitons(username, message);
                 }
             }
         });
     }
+
+    public void removeMessageHandler() {
+        mSocket.off(SocketEventConstants.newMessage);
+    }
+
     public void emit(String event,Object[] args,Ack ack){
         mSocket.emit(event, args, ack);
     }
     public void emit (String event,Object... args) {
-        mSocket.emit(event,args);
+        try {
+            mSocket.emit(event, args,null);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void addOnHandler(String event,Emitter.Listener listener){
-//        if (event.equals(SocketEventConstants.newMessage)) {
-//            mSocket.off(SocketEventConstants.newMessage);
-//        }
             mSocket.on(event, listener);
     }
 
@@ -212,12 +195,14 @@ public class SocketIOService extends Service {
         mSocket.disconnect();
     }
 
+    public void restartSocket(){
+        mSocket.off();
+        mSocket.disconnect();
+        addSocketHandlers();
+    }
+
     public void off(String event){
-        Log.i("Service","offing "+event);
         mSocket.off(event);
-//        if (event.equals(SocketEventConstants.newMessage)) {
-//            addNewMessageHandler();
-//        }
     }
 
     private void broadcastEvent(Intent intent){
@@ -232,18 +217,12 @@ public class SocketIOService extends Service {
     }
 
     public void showNotificaitons(String username, String message){
-
-        Intent toLaunch = new Intent(getApplicationContext(), Dummy.class);
+        Intent toLaunch = new Intent(getApplicationContext(), MainActivity.class);
         toLaunch.putExtra("username",message);
         toLaunch.putExtra("message",message);
-// You'd need this line only if you had shown the notification from a Service
         toLaunch.setAction("android.intent.action.MAIN");
-
-        PendingIntent pIntent = PendingIntent.getActivity(getApplicationContext(), 0,toLaunch, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-// build notification
-// the addAction re-use the same intent to keep the example short
+        PendingIntent pIntent = PendingIntent.getActivity(getApplicationContext(), 0,toLaunch,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification n  = new NotificationCompat.Builder(this)
                 .setContentTitle("You have pending new messages")

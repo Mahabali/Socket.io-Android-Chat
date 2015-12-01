@@ -21,6 +21,6 @@
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/spacing"
         android:paddingRight="@dimen/spacing"
-        android:singleLine="true"/>
+        android:singleLine="false"/>
 
 </LinearLayout>

@@ -83,20 +83,14 @@ public class MainFragment extends Fragment implements SocketListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppSocketListener.getInstance().setActiveSocketListener(this);
-        setHasOptionsMenu(true);
+        AppSocketListener.getInstance().restartSocket();
+        setHasOptionsMenu(false);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         attemptAutoLogin();
-//        Thread backgroundThread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                attemptAutoLogin();
-//            }
-//        });
-//        backgroundThread.start();
     }
 
     @Override
@@ -169,7 +163,6 @@ public class MainFragment extends Fragment implements SocketListener {
             public void afterTextChanged(Editable s) {
             }
         });
-
         ImageButton sendButton = (ImageButton) view.findViewById(R.id.send_button);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,10 +179,8 @@ public class MainFragment extends Fragment implements SocketListener {
             getActivity().finish();
             return;
         }
-
         mUsername = data.getStringExtra("username");
         int numUsers = data.getIntExtra("numUsers", 1);
-
         addLog(getResources().getString(R.string.message_welcome));
         addParticipantsLog(numUsers);
     }
@@ -206,8 +197,6 @@ public class MainFragment extends Fragment implements SocketListener {
                     scrollToBottom();
                 }
             });
-
-
     }
 
     private void addParticipantsLog(int numUsers) {
@@ -240,19 +229,14 @@ public class MainFragment extends Fragment implements SocketListener {
 
     private void attemptSend() {
         if (null == mUsername) return;
-       // if (!mSocket.connected()) return;
-
         mTyping = false;
-
         String message = mInputMessageView.getText().toString().trim();
         if (TextUtils.isEmpty(message)) {
             mInputMessageView.requestFocus();
             return;
         }
-
         mInputMessageView.setText("");
         addMessage(mUsername, message);
-
         // perform the sending message attempt.
         AppSocketListener.getInstance().emit("new message", message);
     }
@@ -260,7 +244,6 @@ public class MainFragment extends Fragment implements SocketListener {
     private void attemptAutoLogin(){
         if (PreferenceStorage.shouldDoAutoLogin()){
             mUsername = PreferenceStorage.getUsername();
-
         }
         else{
             startSignIn();
@@ -276,8 +259,7 @@ public class MainFragment extends Fragment implements SocketListener {
         removeHandlers();
         mUsername = null;
         PreferenceStorage.clearUserSession();
-        AppSocketListener.getInstance().disconnect();
-        AppSocketListener.getInstance().connect();
+        AppSocketListener.getInstance().signOutUser();
         startSignIn();
     }
 
@@ -330,11 +312,9 @@ public class MainFragment extends Fragment implements SocketListener {
                     try {
                         username = data.getString("username");
                         message = data.getString("message");
-                        Log.i("Message"," "+username+ " "+message);
                     } catch (JSONException e) {
                         return;
                     }
-
                     removeTyping(username);
                     addMessage(username, message);
                 }
@@ -357,7 +337,6 @@ public class MainFragment extends Fragment implements SocketListener {
                     } catch (JSONException e) {
                         return;
                     }
-
                     addLog(getResources().getString(R.string.message_user_joined, username));
                     addParticipantsLog(numUsers);
                 }
@@ -439,7 +418,6 @@ public class MainFragment extends Fragment implements SocketListener {
             } catch (JSONException e) {
                 return;
             }
-
             addLog(getResources().getString(R.string.message_welcome));
             addParticipantsLog(numUsers);
         }
@@ -449,7 +427,6 @@ public class MainFragment extends Fragment implements SocketListener {
         @Override
         public void run() {
             if (!mTyping) return;
-
             mTyping = false;
             AppSocketListener.getInstance().emit(SocketEventConstants.stopTyping);
         }
@@ -459,8 +436,6 @@ public class MainFragment extends Fragment implements SocketListener {
     public void onSocketConnected() {
         AppSocketListener.getInstance().addOnHandler(Socket.EVENT_CONNECT_ERROR, onConnectError);
         AppSocketListener.getInstance().addOnHandler(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-
-        //AppSocketListener.getInstance().addOnHandler(SocketEventConstants.newMessage, onNewMessage);
         AppSocketListener.getInstance().addOnHandler(SocketEventConstants.userJoined, onUserJoined);
         AppSocketListener.getInstance().addOnHandler(SocketEventConstants.userLeft, onUserLeft);
         AppSocketListener.getInstance().addOnHandler(SocketEventConstants.typing, onTyping);
@@ -469,7 +444,6 @@ public class MainFragment extends Fragment implements SocketListener {
         if (mUsername != null) {
            AppSocketListener.getInstance().emit(SocketEventConstants.addUser, mUsername);
         }
-
     }
 
     @Override

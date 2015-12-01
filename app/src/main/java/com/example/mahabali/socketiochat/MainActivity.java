@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,19 +17,16 @@ import android.widget.FrameLayout;
 
 public class MainActivity extends Activity {
 
-     FrameLayout activityRootView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        activityRootView =  (FrameLayout) findViewById(R.id.container);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         AppSocketListener.getInstance().setAppConnectedToService(false);
-
     }
 
     @Override

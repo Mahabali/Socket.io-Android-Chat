@@ -1,7 +1,7 @@
 package com.example.mahabali.socketiochat;
 
 /**
- * Created by dhilip on 11/14/15.
+ * Created by Mahabali on 11/14/15.
  */
 public class Message {
 

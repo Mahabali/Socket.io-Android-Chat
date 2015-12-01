@@ -1,7 +1,7 @@
 package com.example.mahabali.socketioservice;
 
 /**
- * Created by dhilip on 11/13/15.
+ * Created by Mahabali on 11/13/15.
  */
 public class SocketEventConstants {
     public static String newMessage ="new message";

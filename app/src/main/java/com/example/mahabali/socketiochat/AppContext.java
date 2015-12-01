@@ -5,14 +5,13 @@ import android.content.Context;
 import android.util.Log;
 
 /**
- * Created by dhilip on 11/14/15.
+ * Created by Mahabali on 11/14/15.
  */
 public class AppContext extends Application {
     private static Context context;
 
     public void onCreate(){
         super.onCreate();
-        Log.i("AppContext","On create called");
         AppContext.context = getApplicationContext();
         initializeSocket();
     }
@@ -33,6 +32,5 @@ public class AppContext extends Application {
     public void onTerminate() {
         super.onTerminate();
         destroySocketListener();
-        Log.i("AppContext", "On terminate called");
     }
 }

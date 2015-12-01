@@ -23,18 +23,19 @@ import io.socket.client.Ack;
 import io.socket.emitter.Emitter;
 
 /**
- * Created by dhilip on 11/14/15.
+ * Created by Mahabali on 11/14/15.
  */
 public class AppSocketListener implements SocketListener{
-
+    private static AppSocketListener sharedInstance;
     private SocketIOService socketServiceInterface;
     public SocketListener activeSocketListener;
 
     public void setActiveSocketListener(SocketListener activeSocketListener) {
         this.activeSocketListener = activeSocketListener;
+        if (socketServiceInterface != null && socketServiceInterface.isSocketConnected()){
+            onSocketConnected();
+        }
     }
-
-    private static AppSocketListener sharedInstance;
 
     public static AppSocketListener getInstance(){
         if (sharedInstance==null){
@@ -42,7 +43,6 @@ public class AppSocketListener implements SocketListener{
         }
         return sharedInstance;
     }
-
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -70,9 +70,15 @@ public class AppSocketListener implements SocketListener{
         Intent intent = new Intent(AppContext.getAppContext(), SocketIOService.class);
         AppContext.getAppContext().startService(intent);
         AppContext.getAppContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-        LocalBroadcastManager.getInstance(AppContext.getAppContext()).registerReceiver(socketConnectionReceiver, new IntentFilter(SocketEventConstants.socketConnection));
-        LocalBroadcastManager.getInstance(AppContext.getAppContext()).registerReceiver(connectionFailureReceiver, new IntentFilter(SocketEventConstants.connectionFailure));
-        LocalBroadcastManager.getInstance(AppContext.getAppContext()).registerReceiver(newMessageReceiver,new IntentFilter(SocketEventConstants.newMessage));
+        LocalBroadcastManager.getInstance(AppContext.getAppContext()).
+                registerReceiver(socketConnectionReceiver, new IntentFilter(SocketEventConstants.
+                        socketConnection));
+        LocalBroadcastManager.getInstance(AppContext.getAppContext()).
+                registerReceiver(connectionFailureReceiver, new IntentFilter(SocketEventConstants.
+                        connectionFailure));
+        LocalBroadcastManager.getInstance(AppContext.getAppContext()).
+                registerReceiver(newMessageReceiver, new IntentFilter(SocketEventConstants.
+                        newMessage));
     }
 
     private BroadcastReceiver socketConnectionReceiver = new BroadcastReceiver() {
@@ -80,6 +86,7 @@ public class AppSocketListener implements SocketListener{
         public void onReceive(Context context, Intent intent) {
            boolean connected = intent.getBooleanExtra("connectionStatus",false);
             if (connected){
+                Log.i("AppSocketListener","Socket connected");
                 onSocketConnected();
             }
             else{
@@ -91,7 +98,9 @@ public class AppSocketListener implements SocketListener{
     private BroadcastReceiver connectionFailureReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast toast = Toast.makeText(AppContext.getAppContext(),"Please check your network connection",Toast.LENGTH_SHORT);
+            Toast toast = Toast.
+                    makeText(AppContext.getAppContext(), "Please check your network connection",
+                            Toast.LENGTH_SHORT);
             toast.show();
         }
     };
@@ -106,16 +115,16 @@ public class AppSocketListener implements SocketListener{
     };
 
     public void destroy(){
-        Log.i("AppSocketListener", "Destroy called");
         socketServiceInterface.setServiceBinded(false);
         AppContext.getAppContext().unbindService(serviceConnection);
-        LocalBroadcastManager.getInstance(AppContext.getAppContext()).unregisterReceiver(socketConnectionReceiver);
-        LocalBroadcastManager.getInstance(AppContext.getAppContext()).unregisterReceiver(newMessageReceiver);
+        LocalBroadcastManager.getInstance(AppContext.getAppContext()).
+                unregisterReceiver(socketConnectionReceiver);
+        LocalBroadcastManager.getInstance(AppContext.getAppContext()).
+                unregisterReceiver(newMessageReceiver);
     }
 
     @Override
     public void onSocketConnected() {
-        Log.i("AppListener", "Socket Connected");
         if (activeSocketListener != null) {
             activeSocketListener.onSocketConnected();
         }
@@ -123,7 +132,6 @@ public class AppSocketListener implements SocketListener{
 
     @Override
     public void onSocketDisconnected() {
-        Log.i("AppListener", "Socket Disconnected");
         if (activeSocketListener != null) {
             activeSocketListener.onSocketDisconnected();
         }
@@ -134,7 +142,6 @@ public class AppSocketListener implements SocketListener{
         if (activeSocketListener != null) {
             activeSocketListener.onNewMessageReceived(username, message);
         }
-
     }
 
     public void addOnHandler(String event,Emitter.Listener listener){
@@ -174,10 +181,26 @@ public class AppSocketListener implements SocketListener{
         }
     }
 
+    public void restartSocket(){
+        if (socketServiceInterface != null){
+         socketServiceInterface.restartSocket();
+        }
+    }
     public void addNewMessageHandler(){
         if (socketServiceInterface != null){
             socketServiceInterface.addNewMessageHandler();
         }
     }
 
+    public void removeNewMessageHandler(){
+        if (socketServiceInterface != null){
+            socketServiceInterface.removeMessageHandler();
+        }
+    }
+
+    public void signOutUser(){
+        AppSocketListener.getInstance().disconnect();
+        removeNewMessageHandler();
+        AppSocketListener.getInstance().connect();
+    }
 }
