@@ -3,6 +3,12 @@ Socket.io based Android Chat app. The code is an improvisation over [nkzawa/sock
 
 Raise suggestions as pull requests.
 
+## Instruction
+1. [Click](http://socket.io/demos/chat/) here
+2. Run your android app
+3. Chat between browser and android
+
+
 ## Screenshots
 
 ![Alt text](/../screenshot/screenshot/Login.png?raw=true "Login Screen") 
