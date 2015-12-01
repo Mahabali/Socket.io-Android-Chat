@@ -83,6 +83,7 @@ public class MainFragment extends Fragment implements SocketListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppSocketListener.getInstance().setActiveSocketListener(this);
+        // Restart Socket.io to avoid weird stuff ;-)
         AppSocketListener.getInstance().restartSocket();
         setHasOptionsMenu(false);
     }
