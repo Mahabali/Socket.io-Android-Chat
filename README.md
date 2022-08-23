@@ -21,8 +21,6 @@ MIT
 ##To Say Hi
 [Me](https://in.linkedin.com/in/dhilipr)
 
-### My Product
-[whichidiot.com](https://whichidiot.com)
 
 ### My consulting site
 [okchanges.com](https://okchanges.com)
